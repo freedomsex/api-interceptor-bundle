@@ -1,0 +1,18 @@
+#parameters:
+
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+#  _instanceof:
+#    FreedomSex\ApiInterceptorBundle\Services\WorkerInterface:
+#      tags: ['api_interceptor']
+
+  FreedomSex\ApiInterceptorBundle\:
+    resource: '../../*'
+    exclude: '../../{DependencyInjection,Entity}'
+
+  FreedomSex\ApiInterceptorBundle\EventListener\InterceptorListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
