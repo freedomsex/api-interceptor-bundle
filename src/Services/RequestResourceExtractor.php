@@ -26,8 +26,11 @@ class RequestResourceExtractor
     public function getResults(ViewEvent $event)
     {
         $results = $event->getControllerResult();
-        if ($results instanceof Response) {
+        if (!$results or $results instanceof Response) {
             return;
+        }
+        if (!is_iterable($results)) {
+            $results = [$results];
         }
         return $results;
     }
