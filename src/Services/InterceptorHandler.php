@@ -55,10 +55,11 @@ class InterceptorHandler
 
     public function handle($level, $intercept, $method)
     {
-        if ($level !== strtolower($intercept->level)) {
+        dump($level, $method->class);
+        if (strcasecmp($level, $intercept->level)) {
             return;
         }
-        if ($this->method() !== strtoupper($intercept->method)) {
+        if (strcasecmp($this->method(), $intercept->method)) {
             return;
         }
 

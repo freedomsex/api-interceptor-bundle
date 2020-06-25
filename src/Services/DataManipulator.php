@@ -4,13 +4,13 @@
 namespace FreedomSex\ApiInterceptorBundle\Services;
 
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class DataManipulator
 {
-    public function __construct(Request $request)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->request = $request;
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     public function getData($className)

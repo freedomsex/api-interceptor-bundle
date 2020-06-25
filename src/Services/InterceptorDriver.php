@@ -4,10 +4,13 @@
 namespace FreedomSex\ApiInterceptorBundle\Services;
 
 
+use ReflectionClass;
+use ReflectionException;
+use RuntimeException;
 use Doctrine\Common\Annotations\Reader;
 use FreedomSex\ApiInterceptorBundle\Annotation\Intercept;
 use FreedomSex\ApiInterceptorBundle\Annotation\Interceptor;
-use FreedomSex\ApiInterceptorBundle\Services\Handler\InterceptorHandler;
+use FreedomSex\ApiInterceptorBundle\Services\InterceptorHandler;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class InterceptorDriver
@@ -22,8 +25,8 @@ class InterceptorDriver
     public function getReflection($className): \ReflectionClass
     {
         try {
-            $reflection = new \ReflectionClass($className);
-        } catch (\ReflectionException $e) {
+            $reflection = new ReflectionClass($className);
+        } catch (ReflectionException $e) {
             throw new RuntimeException('Failed to read ReflectionClass! ' . $className);
         }
         return $reflection;
