@@ -2,7 +2,7 @@
     "name": "freedomsex/api-interceptor-bundle",
     "type": "symfony-bundle",
     "license": "MIT",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "repositories": [],
     "require": {
         "php": "^7.1.0",

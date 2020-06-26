@@ -19,15 +19,14 @@ use Liip\ImagineBundle\Service\FilterService;
 class InterceptorSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        RequestResourceExtractor $resourceExtractor,
-        InterceptorDriver $driver
+        RequestHandlerDriver $requestDriver,
+        InterceptorDriver $interceptorDriver
     ) {
-        $this->resourceExtractor = $resourceExtractor;
-        $this->driver = $driver;
+        $this->requestDriver = $requestDriver;
+        $this->interceptorDriver = $interceptorDriver;
     }
 
     public static function getSubscribedEvents(): array
-
     {
         return [
             KernelEvents::REQUEST => [
@@ -58,12 +57,9 @@ class InterceptorSubscriber implements EventSubscriberInterface
     }
     public function handle($event, $levels)
     {
-        $resource = $this->resourceExtractor->extract($event->getRequest());
-        if (!$resource->valid()) {
-            return;
-        }
         foreach ($levels as $level) {
-            $this->driver->handle($level, $resource, $event);
+            $this->requestDriver->handle($level, $event);
+            $this->interceptorDriver->handle($level, $event);
         }
     }
 

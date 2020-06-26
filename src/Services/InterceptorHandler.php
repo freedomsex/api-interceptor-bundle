@@ -31,7 +31,7 @@ class InterceptorHandler
         return strtoupper($this->request->getMethod());
     }
 
-    public function setup($event, $resource)
+    public function setup($event)
     {
         $this->event = $event;
         $this->request = $event->getRequest();
@@ -55,11 +55,10 @@ class InterceptorHandler
 
     public function handle($level, $intercept, $method)
     {
-        dump($level, $method->class);
-        if (strcasecmp($level, $intercept->level)) {
+        if ($intercept->level and strcasecmp($level, $intercept->level)) {
             return;
         }
-        if (strcasecmp($this->method(), $intercept->method)) {
+        if ($intercept->method and strcasecmp($this->method(), $intercept->method)) {
             return;
         }
 
@@ -72,9 +71,8 @@ class InterceptorHandler
                 return;
             }
         }
-
         $interceptor = $this->container->get($method->class);
-        $interceptor->{$method->name}($this->request, $this->event, $intercept->attributes);
+        $interceptor->{$method->name}($this->event, $intercept->attributes);
     }
 
 }

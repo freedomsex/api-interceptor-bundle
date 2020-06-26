@@ -5,8 +5,7 @@ namespace FreedomSex\ApiInterceptorBundle\DependencyInjection;
 
 
 use FreedomSex\ApiInterceptorBundle\Contract\InterceptorInterface;
-use FreedomSex\ApiInterceptorBundle\Services\Handler\PreSerializeHandlerInterface;
-use FreedomSex\ApiInterceptorBundle\Services\Worker\WorkerInterface;
+use FreedomSex\ApiInterceptorBundle\Contract\RequestHandlerInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -19,8 +18,8 @@ class ApiInterceptorExtension extends Extension implements ExtensionInterface, C
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $container->registerForAutoconfiguration(PreSerializeHandlerInterface::class)
-            ->addTag('itr.serializer.pre_handler');
+        $container->registerForAutoconfiguration(RequestHandlerInterface::class)
+            ->addTag('request.handler');
         $container->registerForAutoconfiguration(InterceptorInterface::class)
             ->addTag('interceptor');
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -33,11 +32,13 @@ class ApiInterceptorExtension extends Extension implements ExtensionInterface, C
             $container->getDefinition($serviceId)->setPublic(true);
         }
 
-        $definition = $container->findDefinition('FreedomSex\ApiInterceptorBundle\Services\Handler\PreSerializeCollector');
-        $services = $container->findTaggedServiceIds('itr.serializer.pre_handler');
+        $definition = $container->findDefinition('FreedomSex\ApiInterceptorBundle\Services\RequestHandlerDriver');
+        $services = $container->findTaggedServiceIds('request.handler');
 
         foreach ($services as $id => $tags) {
-            $definition->addMethodCall('addHandler', [new Reference($id)]);
+//            $definition->addMethodCall('addHandler', [new Reference($id)]);
+            $container->getDefinition($id)->setPublic(true);
+            $definition->addMethodCall('addHandler', [$id]);
         }
     }
 }

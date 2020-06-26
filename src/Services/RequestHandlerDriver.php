@@ -3,26 +3,29 @@
 
 namespace FreedomSex\ApiInterceptorBundle\Services;
 
-
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
 use Doctrine\Common\Annotations\Reader;
 use FreedomSex\ApiInterceptorBundle\Annotation\Intercept;
 use FreedomSex\ApiInterceptorBundle\Annotation\Interceptor;
-use FreedomSex\ApiInterceptorBundle\Services\InterceptorHandler;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
-class InterceptorDriver
+class RequestHandlerDriver
 {
+    protected $handlers = [];
+
     public function __construct(
         Reader $annotationReader,
-        InterceptorHandler $interceptorHandler,
-        RequestResourceExtractor $resourceExtractor
+        InterceptorHandler $interceptorHandler
     ) {
         $this->annotationReader = $annotationReader;
         $this->interceptorHandler = $interceptorHandler;
-        $this->resourceExtractor = $resourceExtractor;
+    }
+
+    public function addHandler($handler)
+    {
+        $this->handlers[] = $handler;
     }
 
     public function getReflection($className): \ReflectionClass
@@ -50,34 +53,27 @@ class InterceptorDriver
 
     public function handle($level, $event)
     {
-        $resource = $this->resourceExtractor->extract($event->getRequest());
-        if (!$resource->valid()) {
-            return;
-        }
-        $resourceAnnotation = $this->getClassAnnotation($resource->resourceClassName());
-        if (!$resourceAnnotation) {
-            return;
-        }
-        $classAnnotation = $this->getReflection($resourceAnnotation->source);
-        if (!$classAnnotation) {
-            return;
-        }
-        $methods = $classAnnotation->getMethods();
-        foreach ($methods as $method) {
-            $this->run($level, $method, $event);
+        $this->interceptorHandler->setup($event);
+        foreach ($this->handlers as $handlerClassName) {
+            $classAnnotation = $this->getReflection($handlerClassName);
+            if (!$classAnnotation) {
+                return;
+            }
+            $methods = $classAnnotation->getMethods();
+            foreach ($methods as $method) {
+                $this->run($level, $method, $event);
+            }
         }
     }
 
-    public function run($level, $method, $event)
+    public function run($level, $method)
     {
-        $methodAnnotations = $this->getMethodAnnotation($method->class, $method->name);
-        if (!$methodAnnotations) {
+        $interceptor = $this->getMethodAnnotation($method->class, $method->name);
+        if (!$interceptor) {
             return;
         }
-        $this->interceptorHandler->setup($event);
-        $this->interceptorHandler->handle($level, $methodAnnotations, $method);
+        $this->interceptorHandler->handle($level, $interceptor, $method);
 //        $methodAnnotations;
     }
-
 
 }

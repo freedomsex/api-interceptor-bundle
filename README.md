@@ -1,10 +1,14 @@
 # Api Interceptor 
 
+> BETA. 1.0.* - these are drafts
+
 ApiPlatform does not use controllers. Although the symphony framework is only built on the concept of `controller`. An interceptor is an attempt to replace controller functions. This is something that is required when you do not have a controller, but only a resource object.
 
 ## Description
 
-The interceptor method runs at the specified `level` when the specified request `method` is called. You can pass some `attributes`. The `Intercept` method receives _request_ objects and _events_. The third parameter is the _attributes_ for the interceptor.
+The interceptor method runs at the specified `level` when the specified request `method` is called. You can pass some `attributes`. The `Intercept` method receives  _events_ object. The second parameter is the _attributes_ for the interceptor.
+
+At the moment, you can intercept a specific resource using the `Interceptor` or any request using the `RequestHandler`.
 
 ## Annotations
 
@@ -81,3 +85,23 @@ GET, POST, PUT, PATCH, DELETE
 
 Not necessary. Something to pass to the interceptor method.
 
+---
+
+## RequestHandler
+
+Create a request interceptor class. Apply the `RequestHandlerInterface` interface. You can use the _request.handler_ tag. Set the interceptor annotation to the selected method.
+
+```php
+use FreedomSex\ApiInterceptorBundle\Contract\RequestHandlerInterface;
+
+class SomeHandler implements RequestHandlerInterface
+{ 
+    /**
+     * @Intercept("PRE_SERIALIZE", method="GET")
+     */
+    public function someMethod($event)
+    {
+        //
+    } 
+}
+```
