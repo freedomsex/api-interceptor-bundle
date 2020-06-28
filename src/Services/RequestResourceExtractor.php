@@ -23,18 +23,6 @@ class RequestResourceExtractor
         return RequestAttributesExtractor::class;
     }
 
-    public function getResults(ViewEvent $event)
-    {
-        $results = $event->getControllerResult();
-        if (!$results or $results instanceof Response) {
-            return;
-        }
-        if (!is_iterable($results)) {
-            $results = [$results];
-        }
-        return $results;
-    }
-
     public function resourceClassName()
     {
         return $this->attributes['resource_class'] ?? null;

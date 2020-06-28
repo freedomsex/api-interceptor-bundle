@@ -80,7 +80,7 @@ class InterceptorSubscriber implements EventSubscriberInterface
 
     public function TERMINATE($event)
     {
-        $this->handle($event, ['audit', 'finish', 'TERMINATE']);
+        $this->handle($event, ['audit', 'TERMINATE']);
     }
 
 //    public function handleResults($event)
@@ -127,7 +127,7 @@ class InterceptorSubscriber implements EventSubscriberInterface
     // Validates data (POST, PUT)
     public function PRE_VALIDATE(ViewEvent $event): void
     {
-        $this->handle($event, ['read', 'PRE_VALIDATE']);
+        $this->handle($event, ['PRE_VALIDATE']);
     }
     public function POST_VALIDATE(ViewEvent $event): void
     {
@@ -152,7 +152,7 @@ class InterceptorSubscriber implements EventSubscriberInterface
     }
     public function POST_DESERIALIZE(RequestEvent $event): void
     {
-        $this->handle($event, ['POST_DESERIALIZE']);
+        $this->handle($event, ['read', 'POST_DESERIALIZE']);
     }
 
     // Persists changes in the persistence system

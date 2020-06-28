@@ -70,12 +70,16 @@ Constant           | Event             | Priority |
 `POST_RESPOND`     | `kernel.response` | 0        |
   
 Initial Shortcut concept
-* Init - first stage of request
-* Read - request reading moment
-* Write - record response result
-* Audit - after sending a response
-* Finish - terminal stage of request
+* Init(_REQUEST_) - first stage of request
+* **Read**(_POST_DESERIALIZE_) - request `data reading` moment
+* **Write**(_PRE_SERIALIZE_) - `record data` response result
+* Audit(_TERMINATE_) - after sending a response
 
+Additional(with 0 priority)
+* REQUEST `kernel.request`
+* VIEW `kernel.view`
+* RESPONSE `kernel.response`
+* TERMINATE `kernel.terminate`
 
 #### Methods
 

@@ -1,3 +1,0 @@
-{
-    "packageFiles": ["composer.json"]
-}
