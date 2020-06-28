@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/freedomsex/api-interceptor-bundle/compare/v1.0.3...v1.0.4) (2020-06-28)
+
+
+### Bug Fixes
+
+* data extractor ([cb8d664](https://github.com/freedomsex/api-interceptor-bundle/commit/cb8d664a2bf14189a0713d0250564fc384b6c624))
+
 ### [1.0.3](https://github.com/freedomsex/api-interceptor-bundle/compare/v1.0.2...v1.0.3) (2020-06-26)
 
 
