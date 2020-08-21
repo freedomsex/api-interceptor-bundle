@@ -27,7 +27,7 @@ class DataManipulator
         return $results;
     }
 
-    public function getData($className)
+    public function getData($className = null)
     {
         $data = $this->request->attributes->get('data');
         if ($className and !($data instanceof $className)) {
