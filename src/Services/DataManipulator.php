@@ -15,6 +15,11 @@ class DataManipulator
         $this->request = $requestStack->getCurrentRequest();
     }
 
+    public function params($key = null)
+    {
+        return $this->request->get($key);
+    }
+
     public function getResults(ViewEvent $event)
     {
         $results = $event->getControllerResult();
