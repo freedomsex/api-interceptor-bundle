@@ -13,6 +13,7 @@ class InterceptorHandler
     const COLLECTION_METHODS = ['GET', 'POST'];
 
     protected $event;
+    protected $resourceClassName;
     /* @var Request */
     protected $request;
 
@@ -31,10 +32,11 @@ class InterceptorHandler
         return strtoupper($this->request->getMethod());
     }
 
-    public function setup($event)
+    public function setup($event, $resourceClassName)
     {
         $this->event = $event;
         $this->request = $event->getRequest();
+        $this->resourceClassName = $resourceClassName;
     }
 
     public function limitation($interceptor)
@@ -75,7 +77,15 @@ class InterceptorHandler
         if (method_exists($interceptor, 'setEvent')) {
             $interceptor->setEvent($this->event);
         }
-        $interceptor->{$method->name}($this->event, $intercept->attributes);
+        if (method_exists($interceptor, 'setClassName')) {
+            $interceptor->setClassName($this->resourceClassName);
+        }
+        if (is_subclass_of($interceptor, 'AbstractInterceptor')) {
+            $data = $interceptor->data($this->resourceClassName);
+            $interceptor->{$method->name}($data, $this->event, $intercept->attributes);
+        } else {
+            $interceptor->{$method->name}($this->event, $intercept->attributes);
+        }
     }
 
 }

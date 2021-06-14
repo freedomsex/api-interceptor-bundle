@@ -84,7 +84,7 @@ class InterceptorDriver
         if (!$methodAnnotations) {
             return;
         }
-        $this->interceptorHandler->setup($event);
+        $this->interceptorHandler->setup($event, $this->resourceClassName);
         $this->interceptorHandler->handle($level, $methodAnnotations, $method);
 //        $methodAnnotations;
     }
