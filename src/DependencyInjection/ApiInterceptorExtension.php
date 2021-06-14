@@ -29,7 +29,8 @@ class ApiInterceptorExtension extends Extension implements ExtensionInterface, C
     public function process(ContainerBuilder $container)
     {
         foreach ($container->findTaggedServiceIds('interceptor') as $serviceId => $tags) {
-            $container->getDefinition($serviceId)->setPublic(true);
+            $definition = $container->getDefinition($serviceId);
+            $definition->setPublic(true);
         }
 
         $definition = $container->findDefinition('FreedomSex\ApiInterceptorBundle\Services\RequestHandlerDriver');

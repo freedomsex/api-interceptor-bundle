@@ -72,6 +72,9 @@ class InterceptorHandler
             }
         }
         $interceptor = $this->container->get($method->class);
+        if (method_exists($interceptor, 'setEvent')) {
+            $interceptor->setEvent($this->event);
+        }
         $interceptor->{$method->name}($this->event, $intercept->attributes);
     }
 

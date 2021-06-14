@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class InterceptorDriver
 {
+    protected $resourceClassName;
+
     public function __construct(
         Reader $annotationReader,
         InterceptorHandler $interceptorHandler,
@@ -23,6 +25,11 @@ class InterceptorDriver
         $this->annotationReader = $annotationReader;
         $this->interceptorHandler = $interceptorHandler;
         $this->resourceExtractor = $resourceExtractor;
+    }
+
+    public function setClassName($resourceClassName)
+    {
+        $this->resourceClassName = $resourceClassName;
     }
 
     public function getReflection($className): \ReflectionClass
@@ -54,10 +61,13 @@ class InterceptorDriver
         if (!$resource->valid()) {
             return;
         }
-        $resourceAnnotation = $this->getClassAnnotation($resource->resourceClassName());
+        $resourceClassName = $resource->resourceClassName();
+        $resourceAnnotation = $this->getClassAnnotation($resourceClassName);
         if (!$resourceAnnotation) {
             return;
         }
+        $this->setClassName($resourceClassName);
+
         $classAnnotation = $this->getReflection($resourceAnnotation->source);
         if (!$classAnnotation) {
             return;
