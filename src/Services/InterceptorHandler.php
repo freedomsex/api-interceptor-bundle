@@ -32,7 +32,7 @@ class InterceptorHandler
         return strtoupper($this->request->getMethod());
     }
 
-    public function setup($event, $resourceClassName)
+    public function setup($event, ?string $resourceClassName = null)
     {
         $this->event = $event;
         $this->request = $event->getRequest();
