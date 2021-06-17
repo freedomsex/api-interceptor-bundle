@@ -4,6 +4,7 @@
 namespace FreedomSex\ApiInterceptorBundle\Services;
 
 
+use FreedomSex\ApiInterceptorBundle\Services\DataManipulator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,9 +18,10 @@ class InterceptorHandler
     /* @var Request */
     protected $request;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, DataManipulator $dataManipulator)
     {
         $this->container = $container;
+        $this->dataManipulator = $dataManipulator;
     }
 
     public function isItem()
@@ -80,8 +82,10 @@ class InterceptorHandler
         if (method_exists($interceptor, 'setClassName')) {
             $interceptor->setClassName($this->resourceClassName);
         }
-        if (is_subclass_of($interceptor, 'AbstractInterceptor')) {
-            $data = $interceptor->data($this->resourceClassName);
+        $isAbstract = is_subclass_of($interceptor, 'FreedomSex\ApiInterceptorBundle\Services\AbstractInterceptor');
+        if ($isAbstract) {
+            $interceptor->setDataManipulator($this->dataManipulator);
+            $data = $interceptor->data($this->resourceClassName, false);
             $interceptor->{$method->name}($data, $this->event, $intercept->attributes);
         } else {
             $interceptor->{$method->name}($this->event, $intercept->attributes);

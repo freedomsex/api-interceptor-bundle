@@ -5,6 +5,7 @@ namespace FreedomSex\ApiInterceptorBundle\Services;
 
 
 use FreedomSex\ApiInterceptorBundle\Contract\InterceptorInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 abstract class AbstractInterceptor implements InterceptorInterface
 {
@@ -38,10 +39,10 @@ abstract class AbstractInterceptor implements InterceptorInterface
         return $this->dataManipulator->params($key);
     }
 
-    public function data($class = null)
+    public function data($class = null, $strict = true)
     {
         $object = $this->dataManipulator->getData($class);
-        if (!$object) {
+        if ($class and $strict and !$object) {
             throw new BadRequestHttpException();
         }
         return $object;
