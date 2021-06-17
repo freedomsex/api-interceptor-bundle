@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.10](https://github.com/freedomsex/api-interceptor-bundle/compare/v1.0.9...v1.0.10) (2021-06-17)
+
+
+### Bug Fixes
+
+* setDataManipulator ([2899f52](https://github.com/freedomsex/api-interceptor-bundle/commit/2899f5213a48a0d2e3e6bb8e573eb95a5bff21f9))
+
 ### [1.0.9](https://github.com/freedomsex/api-interceptor-bundle/compare/v1.0.8...v1.0.9) (2021-06-16)
 
 
